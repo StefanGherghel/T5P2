@@ -1,112 +1,232 @@
-import os
-import tkinter as tk
+from tkinter import *
+import tkinter.messagebox
 from multiprocessing import Process, Queue
-# from queue import Queue
-from collections import deque
-from multiprocessing import Process, Queue
-# from queue import Queue
+
 from collections import deque
 
-
-class Parser:
-    pass
-
-Parser
 message_queue = Queue()
-# message_queue.put(deque([]))
+
+tk = Tk()
+tk.title("Tic Tac Toe")
+tk2 = Tk()
+tk2.title("Tic tac toe 2")
 
 
-def procesare_impare(message_queue,integer_list_text):
-    result = integer_list_text.get("1.0", tk.END)
-    result = [int(item) for item in result.split(',')]
-    integer_list_text = result
-    for i in integer_list_text:
-        if i % 2 == 1:
-            integer_list_text.remove(i)
-    print(result)
-def procesare_sumare(message_queue,integer_list_text):
-    result = integer_list_text.get("1.0", tk.END)
-    result = [int(item) for item in result.split(',')]
-    integer_list_text = result
-    sum = 0
-    for i in integer_list_text:
-        sum += i
-    print(sum)
+
+pa = StringVar()
+playerb = StringVar()
+p1 = StringVar()
+p2 = StringVar()
+
+bclick = True
+flag = 0
 
 
-def task_creator(int_list, message_queue):
-    all_messages = message_queue.get()
-    try:
-        # message = all_messages.pop()
-        if 'filtrare' in all_messages:
-            filtrare = Process(target=procesare_impare, args=(message_queue,int_list))
-            filtrare.start()
-            filtrare.join()
-            all_messages = all_messages.replace('filtrare', '')
-        if 'sumare' in all_messages:
-            sumare = Process(target=procesare_sumare, args=(message_queue,int_list))
-            sumare.start()
-            sumare.join()
-            all_messages = all_messages.replace('sumare', '')
-        message_queue.put(all_messages)
-    except IndexError:
-        print("Task1: Empty message queue")
+def disableButton():
+    button1.configure(state=DISABLED)
+    button2.configure(state=DISABLED)
+    button3.configure(state=DISABLED)
+    button4.configure(state=DISABLED)
+    button5.configure(state=DISABLED)
+    button6.configure(state=DISABLED)
+    button7.configure(state=DISABLED)
+    button8.configure(state=DISABLED)
+    button9.configure(state=DISABLED)
 
 
-class Parser:
-    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-    A = None
-    B = None
-
-    def __init__(self, gui):
-        self.gui = gui
-        self.gui.title('Exemplul 1 cu Tkinter')
-
-        self.gui.geometry("700x150")
-
-        self.integer_list_lbl = tk.Label(master=self.gui,text="List of integers:")
-        self.todo0_lbl = tk.Label(master=self.gui, text="TODO_0: Add a Text field to display the result")
-        self.todo1_lbl = tk.Label(master=self.gui, text="TODO_1: Add a button for each operation")
-
-        self.add_list_btn = tk.Button(master=self.gui, text="Add list", command=self.add_list)
-        self.add_list_btn_impare = tk.Button(master=self.gui, text="Filtrare impare", command=self.filtrare_impare)
-        self.add_list_btn_sumare = tk.Button(master=self.gui, text="Suma numere", command=self.sumare_1)
-
-        self.integer_list_text = tk.Text(self.gui, width=50, height=1)
-        self.integer_list_text.insert(tk.END, str(list(range(1, 16)))[1:-1])
-
-    # alignment on the grid
-        self.integer_list_lbl.grid(row=0, column=0)
-        self.todo0_lbl.grid(row=1, column=1)
-        self.todo1_lbl.grid(row=2, column=1)
-        self.integer_list_text.grid(row=0, column=1)
-        self.add_list_btn.grid(row=0, column=2)
-        self.add_list_btn_impare.grid(row=1, column=2)
-        self.add_list_btn_sumare.grid(row=3, column=2)
-        self.gui.mainloop()
-
-    def add_list(self):
-        result = self.integer_list_text.get("1.0", tk.END)
-        result = result.strip().replace(' ', '')
-        result = [int(item) for item in result.split(',')]
-        self.integer_list = result
-        print(result)
-    def filtrare_impare(self):
-        message_queue.put("filtrare")
-        process0 = Process(target=task_creator, args=(self.integer_list_text,message_queue))
-        process0.start()
-        process0.join()
-
-    def sumare_1(self):
-        message_queue.put("sumare")
-        process0 = Process(target=task_creator, args=(self.integer_list_text, message_queue))
-        process0.start()
-        process0.join()
+def btnClick(buttons):
+    message_queue.put(buttons)
+    return 0
 
 
-if __name__ == '__main__':
-    root = tk.Tk()
-    root.title('Exemplul 1 cu Tkinter')
-    app = Parser(root)      # am pornit ecranul grafic
+def btnClickCheck():
+    buttons = message_queue.get()
+    nr = buttons
+    if buttons<=9 and buttons>=1:
+        if buttons==1:
+            buttons = button1
+        elif buttons == 2:
+            buttons = button2
+        elif buttons== 3:
+            buttons = button3
+        elif buttons == 4:
+            buttons=button4
+        elif buttons == 5:
+            buttons = button5
+        elif buttons == 6:
+            buttons = button6
+        elif buttons == 7:
+            buttons = button7
+        elif buttons == 8:
+            buttons = button8
+        elif buttons == 9:
+            buttons = button9
+        else: return 0
+        global bclick, flag, player2_name, player1_name, playerb, pa
+        if buttons["text"] == " " and bclick == True:
+            buttons["text"] = "X"
+            flag += 1
+        elif buttons["text"] == " " and bclick == False:
+            buttons["text"] = "O"
+        else:
+            tkinter.messagebox.showinfo("Tic-Tac-Toe", "Button already Clicked!")
+        if nr <= 9 and nr >= 1:
+            if nr == 1:
+                buttons = button12
+            elif nr == 2:
+                buttons = button22
+            elif nr == 3:
+                buttons = button32
+            elif nr == 4:
+                buttons = button42
+            elif nr == 5:
+                buttons = button52
+            elif nr == 6:
+                buttons = button62
+            elif nr == 7:
+                buttons = button72
+            elif nr == 8:
+                buttons = button82
+            elif nr == 9:
+                buttons = button92
+            else:
+                return 0
+        if buttons["text"] == " " and bclick == True:
+            buttons["text"] = "X"
+            bclick = False
+            playerb = p2.get() + " Wins!"
+            pa = p1.get() + " Wins!"
+            checkForWin()
+            flag += 1
+        elif buttons["text"] == " " and bclick == False:
+            buttons["text"] = "O"
+            bclick = True
+            checkForWin()
+            flag += 1
+        else:
+            tkinter.messagebox.showinfo("Tic-Tac-Toe", "Button already Clicked!")
 
+def checkForWin():
+    if (button1['text'] == 'X' and button2['text'] == 'X' and button3['text'] == 'X' or
+            button4['text'] == 'X' and button5['text'] == 'X' and button6['text'] == 'X' or
+            button7['text'] == 'X' and button8['text'] == 'X' and button9['text'] == 'X' or
+            button1['text'] == 'X' and button5['text'] == 'X' and button9['text'] == 'X' or
+            button3['text'] == 'X' and button5['text'] == 'X' and button7['text'] == 'X' or
+            button1['text'] == 'X' and button2['text'] == 'X' and button3['text'] == 'X' or
+            button1['text'] == 'X' and button4['text'] == 'X' and button7['text'] == 'X' or
+            button2['text'] == 'X' and button5['text'] == 'X' and button8['text'] == 'X' or
+            button7['text'] == 'X' and button6['text'] == 'X' and button9['text'] == 'X'):
+        disableButton()
+        tkinter.messagebox.showinfo("Tic-Tac-Toe", pa)
+
+    elif (flag == 8):
+        tkinter.messagebox.showinfo("Tic-Tac-Toe", "It is a Tie")
+
+    elif (button1['text'] == 'O' and button2['text'] == 'O' and button3['text'] == 'O' or
+          button4['text'] == 'O' and button5['text'] == 'O' and button6['text'] == 'O' or
+          button7['text'] == 'O' and button8['text'] == 'O' and button9['text'] == 'O' or
+          button1['text'] == 'O' and button5['text'] == 'O' and button9['text'] == 'O' or
+          button3['text'] == 'O' and button5['text'] == 'O' and button7['text'] == 'O' or
+          button1['text'] == 'O' and button2['text'] == 'O' and button3['text'] == 'O' or
+          button1['text'] == 'O' and button4['text'] == 'O' and button7['text'] == 'O' or
+          button2['text'] == 'O' and button5['text'] == 'O' and button8['text'] == 'O' or
+          button7['text'] == 'O' and button6['text'] == 'O' and button9['text'] == 'O'):
+        disableButton()
+        tkinter.messagebox.showinfo("Tic-Tac-Toe", playerb)
+
+
+buttons = StringVar()
+
+label = Label(tk, text="Player 1:", font='Times 20 bold', bg='white', fg='black', height=1, width=8)
+label.grid(row=1, column=0)
+
+button1 = Button(tk, text=" ", font='Times 20 bold', bg='gray', fg='white', height=4, width=8,
+                 command=lambda: [btnClick(1), btnClickCheck()])
+button1.grid(row=3, column=0)
+
+button2 = Button(tk, text=' ', font='Times 20 bold', bg='gray', fg='white', height=4, width=8,
+                 command=lambda: [btnClick(2), btnClickCheck()])
+button2.grid(row=3, column=1)
+
+button3 = Button(tk, text=' ', font='Times 20 bold', bg='gray', fg='white', height=4, width=8,
+                 command=lambda: [btnClick(3), btnClickCheck()])
+button3.grid(row=3, column=2)
+
+button4 = Button(tk, text=' ', font='Times 20 bold', bg='gray', fg='white', height=4, width=8,
+                 command=lambda: [btnClick(4), btnClickCheck()])
+button4.grid(row=4, column=0)
+
+button5 = Button(tk, text=' ', font='Times 20 bold', bg='gray', fg='white', height=4, width=8,
+                 command=lambda: [btnClick(5), btnClickCheck()])
+button5.grid(row=4, column=1)
+
+button6 = Button(tk, text=' ', font='Times 20 bold', bg='gray', fg='white', height=4, width=8,
+                 command=lambda: [btnClick(6), btnClickCheck()])
+button6.grid(row=4, column=2)
+
+button7 = Button(tk, text=' ', font='Times 20 bold', bg='gray', fg='white', height=4, width=8,
+                 command=lambda: [btnClick(7), btnClickCheck()])
+button7.grid(row=5, column=0)
+
+button8 = Button(tk, text=' ', font='Times 20 bold', bg='gray', fg='white', height=4, width=8,
+                 command=lambda: [btnClick(8), btnClickCheck()])
+button8.grid(row=5, column=1)
+
+button9 = Button(tk, text=' ', font='Times 20 bold', bg='gray', fg='white', height=4, width=8,
+                 command=lambda: [btnClick(9), btnClickCheck()])
+button9.grid(row=5, column=2)
+
+
+
+
+
+
+label2 = Label(tk2, text="Player 2:", font='Times 20 bold', bg='white', fg='black', height=1, width=8)
+label2.grid(row=2, column=0)
+
+button12 = Button(tk2, text=" ", font='Times 20 bold', bg='gray', fg='white', height=4, width=8,
+                 command=lambda: [btnClick(1), btnClickCheck()])
+button12.grid(row=3, column=0)
+
+button22 = Button(tk2, text=' ', font='Times 20 bold', bg='gray', fg='white', height=4, width=8,
+                 command=lambda: [btnClick(2), btnClickCheck()])
+button22.grid(row=3, column=1)
+
+button32 = Button(tk2, text=' ', font='Times 20 bold', bg='gray', fg='white', height=4, width=8,
+                 command=lambda: [btnClick(3), btnClickCheck()])
+button32.grid(row=3, column=2)
+
+button42 = Button(tk2, text=' ', font='Times 20 bold', bg='gray', fg='white', height=4, width=8,
+                 command=lambda: [btnClick(4), btnClickCheck()])
+button42.grid(row=4, column=0)
+
+button52 = Button(tk2, text=' ', font='Times 20 bold', bg='gray', fg='white', height=4, width=8,
+                 command=lambda: [btnClick(5), btnClickCheck()])
+button52.grid(row=4, column=1)
+
+button62 = Button(tk2, text=' ', font='Times 20 bold', bg='gray', fg='white', height=4, width=8,
+                 command=lambda: [btnClick(6), btnClickCheck()])
+button62.grid(row=4, column=2)
+
+button72 = Button(tk2, text=' ', font='Times 20 bold', bg='gray', fg='white', height=4, width=8,
+                 command=lambda: [btnClick(7), btnClickCheck()])
+button72.grid(row=5, column=0)
+
+button82 = Button(tk2, text=' ', font='Times 20 bold', bg='gray', fg='white', height=4, width=8,
+                 command=lambda: [btnClick(8), btnClickCheck()])
+button82.grid(row=5, column=1)
+
+button92 = Button(tk2, text=' ', font='Times 20 bold', bg='gray', fg='white', height=4, width=8,
+                 command=lambda: [btnClick(9), btnClickCheck()])
+button92.grid(row=5, column=2)
+
+
+joc1 = Process(target=tk.mainloop(), args=(message_queue,))
+joc2 = Process(target=tk2.mainloop(), args=(message_queue,))
+
+joc1.start()
+joc2.start()
+
+joc1.join()
+joc2.join()
 
